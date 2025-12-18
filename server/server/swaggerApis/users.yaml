@@ -1,0 +1,13 @@
+components:
+  schemas:
+    usersInputSchema:
+      type: object
+      example:
+        userName: String
+        created: Date
+        updated: Date
+        email: String
+        password: String
+        phoneNo: String
+        department: String
+        location: String

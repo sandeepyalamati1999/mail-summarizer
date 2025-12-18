@@ -1,0 +1,9 @@
+{
+  "userName": "String",
+  "created": "Date",
+  "updated": "Date",
+  "phoneNo": "String",
+  "department": "String",
+  "location": "String",
+  "email": "String"
+}

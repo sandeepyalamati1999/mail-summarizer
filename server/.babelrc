@@ -1,0 +1,11 @@
+{
+  "presets": [
+    "@babel/preset-env"
+  ],
+  "plugins": [
+    "@babel/plugin-transform-destructuring",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-private-methods",
+    "@babel/plugin-transform-optional-chaining"
+  ]
+}

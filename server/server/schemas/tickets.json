@@ -1,0 +1,43 @@
+{
+  "name": "String",
+  "updated": "Date",
+  "ticketId": "String",
+  "subject": "String",
+  "description": "String",
+  "priority": {
+    "type": "String",
+    "enum": [
+      "low",
+      "medium",
+      "high",
+      "urgent",
+      ""
+    ]
+  },
+  "status": {
+    "type": "String",
+    "enum": [
+      "new",
+      "open",
+      "in progress",
+      "pending",
+      "resolved",
+      "closed",
+      ""
+    ]
+  },
+  "category": {
+    "type": "String",
+    "enum": [
+      "hardware",
+      "software",
+      "network",
+      "billing",
+      "general inquiry",
+      ""
+    ]
+  },
+  "dateOfIssue": "Date",
+  "dateOfSubmission": "Date",
+  "resolutionDate": "Date"
+}
