@@ -1,0 +1,324 @@
+{
+  "menulists": [
+    {
+      "status": "Active",
+      "active": true,
+      "_id": "603e1925f7050e2ddcf0a1a6",
+      "created": "2021-03-24T03:52:58.928Z",
+      "__v": 0,
+      "icon": "graduation-cap",
+      "name": "District And Schools",
+      "title": "District And Schools",
+      "route": "/district",
+      "submenus": [
+        {
+          "icon": "globe",
+          "name": "District",
+          "title": "District",
+          "route": "/district"
+        },
+        {
+          "icon": "graduation-cap",
+          "name": "School",
+          "title": "School",
+          "route": "/school"
+        }
+      ],
+      "order": 2,
+      "updated": "2021-03-29T12:37:09.874Z",
+      "sequenceNo": 1
+    },
+    {
+      "status": "Pending",
+      "active": true,
+      "_id": "60afb03c10f3914b72151bf5",
+      "icon": "credit-card",
+      "name": "Dues Payments",
+      "title": "Dues Payments",
+      "route": "/payments",
+      "submenus": [
+        {
+          "icon": "credit-card",
+          "name": "Payments",
+          "title": "Payments",
+          "route": "/payments"
+        }
+      ],
+      "order": 18,
+      "created": "2021-04-14T08:33:33.978Z",
+      "__v": 0,
+      "sequenceNo": 20
+    },
+    {
+      "status": "Active",
+      "active": true,
+      "_id": "605aba579dfa3d11c722fb49",
+      "icon": "settings",
+      "name": "Settings",
+      "title": "Settings",
+      "route": "/adminSettings",
+      "created": "2021-03-24T04:04:39.711Z",
+      "__v": 0,
+      "order": 15,
+      "updated": "2021-03-29T12:35:46.217Z",
+      "sequenceNo": 45
+    },
+    {
+      "status": "Active",
+      "active": true,
+      "_id": "605ab9d69dfa3d11c722fb3f",
+      "icon": "bar-chart",
+      "name": "Reports",
+      "title": "Reports",
+      "route": "/reports",
+      "created": "2021-03-24T04:02:30.178Z",
+      "__v": 0,
+      "order": 12,
+      "updated": "2021-03-29T12:36:22.159Z",
+      "submenus": [
+        {
+          "icon": "users",
+          "name": "Family Data",
+          "title": "Family Data",
+          "route": "/familydata"
+        },
+        {
+          "icon": "user-check",
+          "name": "Registered",
+          "title": "Registered",
+          "route": "/nonregistered"
+        },
+        {
+          "icon": "clock",
+          "name": "Last Login",
+          "title": "Last Login",
+          "route": "/lastlogin"
+        },
+        {
+          "icon": "clipboard-list",
+          "name": "Audit Logs",
+          "title": "Audit Logs",
+          "route": "/audits"
+        },
+        {
+          "icon": "upload-cloud",
+          "name": "Uploads",
+          "title": "Uploads",
+          "route": "/uploads"
+        }
+      ],
+      "sequenceNo": 35
+    },
+    {
+      "status": "Active",
+      "active": true,
+      "_id": "605ab9b19dfa3d11c722fb3d",
+      "icon": "calendar",
+      "name": "Events",
+      "title": "Events",
+      "route": "/events",
+      "order": 11,
+      "created": "2021-03-24T04:01:53.573Z",
+      "__v": 0,
+      "updated": "2021-03-29T12:36:28.917Z",
+      "sequenceNo": 25
+    },
+    {
+      "status": "Active",
+      "active": true,
+      "_id": "605ab98f9dfa3d11c722fb3b",
+      "icon": "shopping-cart",
+      "name": "Ecommerce",
+      "title": "Ecommerce",
+      "route": "/ecommerce",
+      "created": "2021-03-24T04:01:19.582Z",
+      "__v": 0,
+      "order": 10,
+      "updated": "2021-03-29T12:36:35.878Z",
+      "submenus": [
+        {
+          "icon": "store",
+          "name": "Store",
+          "title": "Store",
+          "route": "/store"
+        },
+        {
+          "icon": "shopping-bag",
+          "name": "Orders",
+          "title": "Orders",
+          "route": "/ordersummary"
+        },
+        {
+          "icon": "box",
+          "name": "Products",
+          "title": "Products",
+          "route": "/products"
+        },
+        {
+          "icon": "shopping-bag",
+          "name": "Orders Management Report",
+          "title": "Orders Management Report",
+          "route": "/ordersummary"
+        },
+        {
+          "icon": "file-text",
+          "name": "Orders Summary Report",
+          "title": "Orders Summary Report",
+          "route": "/ordersummaryreport"
+        },
+        {
+          "icon": "dollar-sign",
+          "name": "Refund Details",
+          "title": "Refund Details",
+          "route": "/RefundDetails"
+        },
+        {
+          "icon": "shopping-bag",
+          "name": "Orders By Store",
+          "title": "Orders By Store",
+          "route": "/ordersummarybystore"
+        },
+        {
+          "icon": "shopping-bag",
+          "name": "Orders By Products",
+          "title": "Orders By Products",
+          "route": "/ordersummarybyproducts"
+        },
+        {
+          "icon": "shopping-bag",
+          "name": "Orders By Store and Products",
+          "title": "Orders By Store and Products",
+          "route": "/order_by_store_products"
+        },
+        {
+          "icon": "shopping-cart",
+          "name": "Pending Carts",
+          "title": "Pending Carts",
+          "route": "/pending_carts"
+        },
+        {
+          "icon": "credit-card",
+          "name": "Ecommerce Payments",
+          "title": "Ecommerce Payments",
+          "route": "/ecommerce_payments"
+        },
+        {
+          "icon": "list",
+          "name": "Orders Summary By Grade",
+          "title": "Orders Summary By Grade",
+          "route": "/order_summary_grade"
+        },
+        {
+          "icon": "list",
+          "name": "Orders Summary By Class",
+          "title": "Orders Summary By Class",
+          "route": "/order_summary_class"
+        }
+      ],
+      "sequenceNo": 30
+    },
+    {
+      "status": "Active",
+      "active": true,
+      "_id": "62444d8610f3914b72d7cf10",
+      "icon": "message-circle",
+      "name": "Communication",
+      "title": "Communication",
+      "route": "/groups",
+      "created": "2021-03-24T04:01:19.582Z",
+      "__v": 0,
+      "order": 10,
+      "updated": "2021-03-29T12:36:35.878Z",
+      "submenus": [
+        {
+          "icon": "users",
+          "name": "Groups",
+          "title": "Groups",
+          "route": "/groups"
+        },
+        {
+          "icon": "user-plus",
+          "name": "Add Member",
+          "title": "Add Member",
+          "route": "/addmember"
+        },
+        {
+          "icon": "user-x",
+          "name": "View and Delete Member",
+          "title": "View and Delete Member",
+          "route": "/viewanddeletemember"
+        },
+        {
+          "icon": "mail",
+          "name": "Group Email",
+          "title": "Group Email",
+          "route": "/groupemail"
+        },
+        {
+          "icon": "mail",
+          "name": "Email History",
+          "title": "Email Status",
+          "route": "/emailstatus"
+        },
+        {
+          "icon": "file-text",
+          "name": "Email Templates",
+          "title": "Email Templates",
+          "route": "/template"
+        },
+        {
+          "icon": "file-text",
+          "name": "Newsletter",
+          "title": "News",
+          "route": "/news"
+        }
+      ],
+      "sequenceNo": 15
+    },
+    {
+      "status": "Active",
+      "active": true,
+      "_id": "605ab9439dfa3d11c722fb37",
+      "icon": "user",
+      "name": "Directory",
+      "title": "Directory",
+      "route": "/family",
+      "submenus": [
+        {
+          "icon": "users",
+          "name": "Family",
+          "title": "Family",
+          "route": "/family"
+        },
+        {
+          "icon": "user",
+          "name": "Students",
+          "title": "Students",
+          "route": "/students"
+        },
+        {
+          "icon": "layers",
+          "name": "Class",
+          "title": "Class",
+          "route": "/class"
+        },
+        {
+          "icon": "layers",
+          "name": "Departments",
+          "title": "Departments",
+          "route": "/departments"
+        },
+        {
+          "icon": "users",
+          "name": "Faculty/Staff",
+          "title": "Faculty/Staff",
+          "route": "/staff"
+        }
+      ],
+      "order": 5,
+      "created": "2021-03-24T03:59:15.499Z",
+      "__v": 0,
+      "sequenceNo": 10
+    }
+  ]
+}

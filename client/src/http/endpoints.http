@@ -1,0 +1,34 @@
+### /battery_status/
+POST http://127.0.0.1:8000/battery_status/
+Content-Type: application/json
+
+{
+  "monitoring_id": 25
+}
+
+
+### /storage_info/
+POST http://127.0.0.1:8000/storage_info/
+Content-Type: application/json
+
+{
+  "monitoring_id": 25
+}
+
+
+### /cpu_usage/
+POST http://127.0.0.1:8000/cpu_usage/
+Content-Type: application/json
+
+{
+  "monitoring_id": 25
+}
+
+
+### /memory_usage/
+POST http://127.0.0.1:8000/memory_usage/
+Content-Type: application/json
+
+{
+  "monitoring_id": 25
+}
