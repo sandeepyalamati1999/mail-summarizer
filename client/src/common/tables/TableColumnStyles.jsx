@@ -41,7 +41,7 @@ const bageColorCodes = {
 const Link = (row, columnProps, column) => {
   const navigate = useNavigate();
   return (
-    <div className="max-w-[250px]" onClick={() => navigate(`${row._id}`)}>
+    <div className="max-w-[250px] text-primary cursor-pointer" onClick={() => navigate(`${row._id}`)}>
       <div
         className={`font-satoshi font-medium whitespace-nowrap overflow-hidden text-ellipsis`}
         style={{ display: 'block', width: '100%' }}
