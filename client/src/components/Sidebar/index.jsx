@@ -4,6 +4,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import CommonLucideIcon from '../../common/Icons/CommonLucideIcon';
 import { useDispatch, useSelector } from 'react-redux';
 import { useGetAllDetailsQuery } from '../../redux/Apislice';
+import { MdEmail } from 'react-icons/md';
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const { data, isLoading, refetch } = useGetAllDetailsQuery(
@@ -51,9 +52,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
-        <NavLink to="/">
-          <h2 className="text-2xl text-white">Metrics</h2>
+      <div className="flex items-center justify-between gap-2 px-2 py-5.5 lg:py-6.5">
+        <NavLink to="/" className={"flex items-center gap-2"}>
+          <MdEmail className="size-5"/>
+          <h2 className="text-2xl text-white">Email Summarization</h2>
           {/* <img src={Logo} alt="Logo" /> */}
         </NavLink>
 

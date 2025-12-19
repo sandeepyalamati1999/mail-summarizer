@@ -6,7 +6,14 @@ import config from '../config/config';
 import asyncHandler from 'express-async-handler';
 import authPolicy from '../middlewares/authenticate';
 
+/**@Webhooks */
+import googleHooks from "../hooks/google.webhook";
+
 const router = express.Router(); // eslint-disable-line new-cap
+
+router.get("/google", authCtrl.googleLogin);
+router.get("/google/webhook", googleHooks.googleLoginWebhook);
+
 
 router.route('/socialLogin')
   .post(asyncHandler(authCtrl.googlelogin));

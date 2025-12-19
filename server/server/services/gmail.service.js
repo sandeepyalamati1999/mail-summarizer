@@ -1,122 +1,109 @@
-const Imap = require('imap');
-const { simpleParser } = require('mailparser');
-import Email from "../models/email.model"; // Ensure Email model has appropriate methods
-import ticketsService from "./tickets.service";
+/**@Packages */
+import { google } from "googleapis";
+import { gmail } from "googleapis/build/src/apis/gmail";
 
-// Create IMAP connection
-const imap = new Imap({
-    user: "vamsitrails@gmail.com", // Replace with actual email or use env variables
-    password: "fehw msyv tzuy apru", // Replace with actual password or use env variables
-    host: "imap.gmail.com",
-    port: 993,
-    tls: true,
-    tlsOptions: {
-        rejectUnauthorized: false,
-    },
-});
+/**@Globals */
+const auth = new google.auth.OAuth2();
 
-// Function to open inbox in read/write mode
-const openInbox = (cb) => {
-    imap.openBox('INBOX', false, cb); // Set the readOnly parameter to false
-};
-
-// Function to fetch emails from inbox
-const fetchEmails = () => {
-    imap.once('ready', () => {
-        openInbox((err, box) => {
-            if (err) throw err;
-
-            // Search for unread messages
-            imap.search(['UNSEEN'], (err, results) => {
-                if (err || results.length === 0) {
-                    console.log('No new emails found.');
-                    return;
-                }
-
-                const fetch = imap.fetch(results, { bodies: '', markSeen: false });
-
-                fetch.on('message', (msg, seqno) => {
-                    msg.on('body', (stream) => {
-                        simpleParser(stream, async (err, parsed) => {
-                            if (err) {
-                                console.error('Error parsing email:', err);
-                                return;
-                            }
-
-                            const { from, to, subject, replyTo, text, html, date } = parsed;
-
-                            // Handle HTML or plain text body
-                            const emailBody = html || text;
-
-                            // Create an object to store the email data
-                            const emailData = {
-                                from: from.text,
-                                to: to.text,
-                                subject: subject || 'No Subject',
-                                replyTo: replyTo ? replyTo.text : null,
-                                body: emailBody || 'No Content',
-                                receivedDate: date,
-                            };
-
-                            // Check for duplicates
-                            const existingEmail = await Email.findOne({
-                                subject: emailData.subject,
-                                receivedDate: emailData.receivedDate,
-                            });
-
-                            if (existingEmail) {
-                                console.log('Duplicate email found, skipping...');
-                                // Mark the email as read to avoid fetching again
-                                imap.addFlags(seqno, '\\Seen', (err) => {
-                                    if (err) {
-                                        console.error('Error marking email as seen:', err);
-                                    } else {
-                                        console.log('Email marked as seen');
-                                    }
-                                });
-                                return; // Skip processing this email
-                            }
-
-                            // Save to database
-                            try {
-                                const emailRecord = new Email(emailData);
-                                const savedResult = await Email.saveData(emailRecord);
-                                await ticketsService.createNewTicketFromEmail(savedResult);
-                                console.log('Email saved to database');
-
-                                // Mark the message as read (seen) in the IMAP server
-                                imap.addFlags(seqno, '\\Seen', (err) => {
-                                    if (err) {
-                                        console.error('Error marking email as seen:', err);
-                                    } else {
-                                        console.log('Email marked as seen');
-                                    }
-                                });
-                            } catch (error) {
-                                console.error('Error saving email to database:', error);
-                            }
-                        });
-                    });
-                });
-
-                fetch.once('end', () => {
-                    console.log('Done fetching emails.');
-                    imap.end(); // Close the IMAP connection
-                });
-            });
+async function getMailsList(accessToken) {
+    try {
+        if(!accessToken) return { error: true, messsage: "provide accessToken."}
+        auth.setCredentials({ access_token: accessToken });
+        const gmail = google.gmail({ version: "v1", auth });
+        const listMessages = await gmail.users.messages.list({
+            userId: "me",
+            q: "is:unread",
+            maxResults: 500
         });
-    });
+        if(listMessages.ok) return { error: false, data: listMessages.data };
+        else return { error: true, message: "failed to fetch emails."}
+    }
+    catch(err) {
+        return { error: true, message: err.message }
+    }
+}
 
-    // Handle connection errors
-    imap.once('error', (err) => {
-        console.error('IMAP Connection Error:', err);
-    });
+async function getFullMessage(accessToken, id) {
+    try {
+        if(!accessToken || !id ) return { error: true, message: "please provide access token and id"}
+        auth.setCredentials({ access_token: accessToken });
+        const gmail = await google.gmail({ version: "v1", auth})
+        const response = await gmail.users.messages.get({ 
+            userId: "me",
+            id,
+            format: "full"
+        });
 
-    imap.end("ready", () => console.log("PROCESS ENDED ========>"))
+        const message = response.data;
+        const headers = message.payload.headers || [];
 
-    // Start IMAP connection
-    imap.connect();
-};
+        const emailObject = {
+        provider: "gmail",
+        from: getHeader(headers, "From"),
+        to: getHeader(headers, "To"),
+        cc: getHeader(headers, "Cc")
+            ? getHeader(headers, "Cc").split(",").map(v => v.trim())
+            : [],
+        bcc: getHeader(headers, "Bcc")
+            ? getHeader(headers, "Bcc").split(",").map(v => v.trim())
+            : [],
 
-// Export the fetchEmails function
-export default fetchEmails;
+        replyTo: getHeader(headers, "Reply-To"),
+        subject: getHeader(headers, "Subject"),
+
+        body: extractBody(message.payload),
+
+        labels: message.labelIds || [],
+        mimeType: message.payload.mimeType,
+        snippet: message.snippet,
+
+        providerMessageId: message.id,
+        threadId: message.threadId,
+        receivedAt: new Date(Number(message.internalDate)),
+        };
+
+        return { error: false, data: emailObject };
+
+
+    }catch(err) {
+        return { error: true, message: err.message, details: err.response?.data?.error || null }
+    }
+}
+
+/**@PrivateFunctions */
+function getHeader(headers, name) {
+  return headers.find(h => h.name.toLowerCase() === name.toLowerCase())?.value || "";
+}
+
+function extractBody(payload) {
+  if (!payload) return "";
+
+  // Single-part message
+  if (payload.body?.data) {
+    return Buffer.from(payload.body.data, "base64").toString("utf-8");
+  }
+
+  // Multi-part message
+  if (payload.parts) {
+    for (const part of payload.parts) {
+      if (
+        part.mimeType === "text/html" ||
+        part.mimeType === "text/plain"
+      ) {
+        if (part.body?.data) {
+          return Buffer.from(part.body.data, "base64").toString("utf-8");
+        }
+      }
+
+      // Recursive for nested parts
+      if (part.parts) {
+        const body = extractBody(part);
+        if (body) return body;
+      }
+    }
+  }
+
+  return "";
+}
+
+export default { getMailsList, getFullMessage }

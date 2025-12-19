@@ -140,52 +140,6 @@ async function list(req, res, next) {
   const query = await serviceUtil.generateListQuery(req,"users");
   query.pagination.totalCount = await Users.totalCount(query);
   
-  // if (req.tokenInfo && req.tokenInfo._doc._id && req.tokenInfo._doc.role && req.tokenInfo._doc.role != 'Admin') {
-  //   query.filter.createdBy = req.tokenInfo._id
-  // }
-  let roleDetails = {}
-  if (req.tokenInfo && req.tokenInfo._doc && req.tokenInfo._doc.role) {
-    roleDetails = await roleModel.findOne({ role: req.tokenInfo._doc.role, active:true })
-  }
-  if (!req.query.searchFrom) {
-    if (req.tokenInfo && req.tokenInfo._doc && req.tokenInfo._doc._id && roleDetails && roleDetails.roleType && roleDetails.roleType === "Employee") {
-      // query.filter.createdBy = req.tokenInfo._doc._id
-      query.filter["$or"] = [{ createdBy: { $in: [req.tokenInfo._doc._id] } }, { createdByName: { $in: [req.tokenInfo._doc._id] }},{ updatedByName: { $in: [req.tokenInfo._doc._id] }},];
-    } else if (req.tokenInfo && req.tokenInfo._doc && req.tokenInfo._doc._id && roleDetails && roleDetails.roleType && roleDetails.roleType === "Manager") {
-      let level = 0
-      roleDetails.levels ? level = roleDetails.levels : level = 1;
-      if (level >= 2) {
-        level = level - 1;
-        let reportingMembersArray = [req.tokenInfo._doc._id]
-        level = level - 1;
-        let reportingMembers = await Users.find({ reportingTo: req.tokenInfo._doc._id }, { _id: 1 });
-        for (let obj of reportingMembers) {
-          reportingMembersArray.push(obj._id);
-        }
-        if (level > 0) {
-          var flag = true
-          while (flag) {
-            if (reportingMembers && reportingMembers.length > 0) {
-              let value1 = await usersService.getEmployees(reportingMembers)
-              reportingMembersArray = [...reportingMembersArray, ...value1];
-              reportingMembers = JSON.parse(JSON.stringify(value1));
-            } else {
-              flag = false;
-            }
-            level = level - 1;
-            level == 0 ? flag = false : null
-          }
-        }
-        if (reportingMembersArray.length > 0) {
-          // query.filter.reportingTo = { $in: reportingMembersArray };
-          query.filter["$or"] = [{ reportingTo: { $in: reportingMembersArray } }, { createdByName: { $in: [req.tokenInfo._doc._id] }},{ updatedByName: { $in: [req.tokenInfo._doc._id] }},];
-        }
-      } else {
-        // query.filter.reportingTo = req.tokenInfo._doc._id //ofor Employee crud
-        query.filter["$or"] = [{ reportingTo: { $in: [req.tokenInfo._doc._id] } }, { createdByName: { $in: [req.tokenInfo._doc._id] }},{ updatedByName: { $in: [req.tokenInfo._doc._id] }},];
-      }
-    }
-  }
   req.entityType = 'users';
   query.dbfields = { password: 0, salt: 0, _v: 0 };
   if (req.query.type === 'exportToCsv') {

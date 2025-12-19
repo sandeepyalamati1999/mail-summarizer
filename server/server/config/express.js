@@ -68,7 +68,10 @@ app.use(methodOverride());
 app.use(helmet());
 
 // enable CORS - Cross Origin Resource Sharing
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  credentials: true
+}));
 
 // enable detailed API logging in dev env
 expressWinston.requestWhitelist.push('body');

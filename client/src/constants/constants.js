@@ -60,3 +60,11 @@ export const badgeColor = {
   ORANGE: 'orange',
   YELLOW: 'yellow',
 };
+
+export const DEFAULT_FILTER = {
+  criteria: [],
+  sortField: "created",
+  direction: "desc",
+  limit: 20,
+  page: 1
+}

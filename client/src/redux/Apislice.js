@@ -31,6 +31,8 @@ export const ApiStore = createApi({
               (obj) => obj['accessToken']
             ),
         },
+        credentials: "include"
+        // credentials: true
       }),
       transformResponse: (response) => {
         return response;

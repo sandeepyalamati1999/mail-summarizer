@@ -1015,6 +1015,50 @@ async function googleLogout(req, res) {
   return res.json(respUtil.logoutSuccessResponse(req));
 }
 
+/**@Imports */
+import googleOAuth from "../auth/google.oauth";
+
+/**
+ * 
+ * @param { import('express').Request } req 
+ * @param { import('express').Response } res 
+ * @param { import('express').NextFunction } next 
+ */
+async function googleLogin(req, res, next) {
+  const url = googleOAuth.generateAuthUrl({
+    access_type: "offline",
+    scope: [
+      // "https://www.googleapis.com/auth/gmail.readonly",
+      // "https://www.googleapis.com/auth/userinfo.email",
+      // "https://www.googleapis.com/auth/userinfo.profile",
+
+      // "https://www.googleapis.com/auth/gmail.readonly",   // Read emails
+      // "https://www.googleapis.com/auth/gmail.send",       // Send emails
+      // "https://www.googleapis.com/auth/gmail.modify",     // Add/remove labels, mark read/unread
+      // "https://www.googleapis.com/auth/gmail.compose",    // Create drafts
+      // "https://www.googleapis.com/auth/gmail.labels",     // Manage labels
+      // "https://www.googleapis.com/auth/gmail.settings.basic",
+      // "https://www.googleapis.com/auth/gmail.settings.sharing",
+      // "https://www.googleapis.com/auth/userinfo.email",
+      // "https://www.googleapis.com/auth/userinfo.profile",
+
+
+      // /**@Calendar */
+      // "https://www.googleapis.com/auth/calendar",
+      // /**@Gmail */
+      // "https://mail.google.com/"
+
+      "https://mail.google.com/",
+      "https://www.googleapis.com/auth/calendar",
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
+      "openid"
+    ],
+  });
+  console.log("URL", url);
+  return res.redirect(url);
+}
+
 export default {
   login,
   getRandomNumber,
@@ -1031,5 +1075,6 @@ export default {
   verifyAuthenticatorOTP,
   googlelogin,
   googleLogout,
+  googleLogin
 };
 

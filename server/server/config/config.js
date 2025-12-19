@@ -121,6 +121,9 @@ let config = {
   serverUrl: "http://localhost:3000/",
   sourceKey: "qVtYv2x5A7CaFcHeMh",
   columnOrder: listPreferencesConfig,
+  googleClient: process.env.GOOGLE_CLIENT_KEY,
+  googleSecret: process.env.GOOGLE_SECRET,
+  frontendUrl: process.env.FRONTENDURL
 };
 
 config = Object.assign(config, emailConfig);

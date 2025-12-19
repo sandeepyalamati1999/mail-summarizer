@@ -1,12 +1,17 @@
+/**@Packages */
+import _ from "lodash";
+import jwt from "jsonwebtoken"
+/**@Models */
 import Users from "../models/users.model";
+import AccessToken from "../models/accessTokens.model";
 
-import session from "../utils/session.util";
+/**@Services */
 import activityService from "./activity.service";
-import i18nService from "../utils/i18n.util";
-//replace_encryptedImport
-//replace_serviceImport
 
-let _ = require("lodash");
+/**@Utils */
+import i18nService from "../utils/i18n.util";
+import session from "../utils/session.util";
+
 /**
  * set Users variables
  * @returns {Users}
@@ -109,25 +114,6 @@ async function insertUsersData(req, res) {
   return obj;
 }
 
-/**
- * TO get the Login cruds records
- * @returns {Users}
- */
-const getEmployees = async (members) => {
-  let reportingMembersArray = [];
-  if (members && members.length > 0) {
-    for (let id of members) {
-      let reportingMembers = await Users.find({ reportingTo: id }, { _id: 1 });
-      if (reportingMembers && reportingMembers.length > 0) {
-        for (let obj of reportingMembers) {
-          reportingMembersArray.push(obj._id);
-        }
-      }
-    }
-  }
-
-  return reportingMembersArray;
-};
 
 const validateFields = async (req, users) => {
   let isError = false;
@@ -185,12 +171,52 @@ const validateUsersBulkFields = async (req, res) => {
   return { headersMatched: true };
 };
 
+async function insertUserAndAccessToken(req, data) {
+
+  /**@CheckForExistingUser */
+  const isUserExists = await Users.findOne({ active: true, email: data.email });
+
+  /**@NotExists - creating user record. */
+  if(!isUserExists) {
+    req.newUser = new Users({
+      email: data?.email,
+      name: data?.name,
+      picture: data?.picture,
+      provider: data?.provider
+    });
+    req.user = await Users.saveData(req.newUser);
+
+  }
+
+  const deleteAccessTokens = await AccessToken.deleteMany({ email: data.email })
+  console.log("ACCESS TOKENS DELETED ===> ", deleteAccessTokens);
+
+
+  req.accessToken = new AccessToken({
+    accessToken: data?.access_token,
+    refreshToken: data?.refresh_token,
+    scope: data?.scope,
+    idToken: data?.id_token,
+    expiryDate: data?.expiry_date,
+    // refreshTokenExpiryDate: ,
+    email: data?.email,
+    name: data?.name,
+    picture: data?.picture,
+  })
+
+  req.accessToken = await AccessToken.saveData(req.accessToken);
+  return;
+
+}
+
+
+
 export default {
   setCreateUsersVariables,
   setUpdateUsersVariables,
   insertUsersData,
-  getEmployees,
   validateFields,
   requriedFields,
   validateUsersBulkFields,
+  insertUserAndAccessToken
 };

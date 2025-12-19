@@ -21,6 +21,10 @@ const menulistRoutes = require("./menulist.route");
 // mount menulists routes at menulists
 router.use("/menus", menulistRoutes);
 
+const mailRoutes = require("./mail.route");
+// mount mails routes at mails
+router.use("/mails", mailRoutes);
+
 import settingsRoutes from "./settings.route";
 // mount settings routes at /settings
 router.use("/settings", settingsRoutes);

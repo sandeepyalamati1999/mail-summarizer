@@ -5,124 +5,33 @@ import mongoose from "mongoose";
 import mongooseFloat from "mongoose-float";
 
 import APIError from "../helpers/APIError";
-
-const Float = mongooseFloat.loadType(mongoose);
 const Schema = mongoose.Schema;
-
-const UsersSchemaJson = require("../schemas/users.json");
-
-/**
- * Default Scheamas
- */
-let defaultSchemaValues = {
-  password: String,
-  salt: String,
-  forgotPasswordExpireTimeStamp: Number,
-  photo: Array,
-  email: String,
-  base32Secrect: String,
-  role: { type: String },
-  // created: {
-  //   type: Date
-  // },
-  // updated: {
-  //   type: Date
-  // },
-  firstTimeLogin: {
-    type: Boolean,
-  },
-  active: {
-    type: Boolean,
-    default: true,
-  },
-  createdBy: {
-    type: Schema.ObjectId,
-  },
-  createdByName: String,
-  updatedByName: String,
-  listPreferences: {
-    type: Schema.Types.ObjectId,
-    ref: "ListPreferences",
-  },
-  isTwoFactorAuthentication: {
-    type: Boolean,
-    default: false,
-  },
-  otp: String,
-  otpExpires: Date,
-  isRemember: {
-    type: Boolean,
-    default: false,
-  },
-  isRememberLogin: Date,
-  enableTwoFactAuth: {
-    type: Boolean,
-    default: true,
-  },
-  photoUrl: String,
-  isGoogleUser: { type: Boolean },
-};
 
 /**
  * Users Schema
  */
 const UsersSchema = new mongoose.Schema(
   {
-    ...defaultSchemaValues,
-    ...UsersSchemaJson,
+    email: {
+      type: String,
+    },
+    name: {
+      type: String,
+    },
+    provider: {
+      type: String,
+    },
+    picture: {
+      type: String,
+    },
+    active: {
+      type: Boolean,
+      default: true
+    }
   },
-  { usePushEach: true }
+  {timestamps: true }
 );
 
-/**
- * Hook a pre save method to hash the password
- */
-UsersSchema.pre("save", function (next) {
-  if (this.password && this.isModified("password")) {
-    this.salt = crypto.randomBytes(16).toString("base64");
-    this.password = this.hashPassword(this.password);
-  }
-
-  next();
-});
-
-/**
- *
- * @Function
- * @ForValidations (preValidatorSchema)
- *
- */
-function preValidatorSchema(thisObj, next) {
-  if (!thisObj) {
-    const validationError = new APIError("failed to save user data.");
-    validationError.name = "mongoFieldError";
-    next(validationError);
-  } else {
-    /**@Remove the *(star) it will work */
-    //*preRequired
-    //*preValidator
-  }
-}
-
-/**
- * Hook a pre validate method to users the local password
- */
-UsersSchema.pre("validate", function (next) {
-  if (
-    this.provider === "local" &&
-    this.password &&
-    this.isModified("password")
-  ) {
-    let result = owasp.users(this.password);
-    if (result.errors.length) {
-      let error = result.errors.join(" ");
-      this.invalidate("password", error);
-    }
-  }
-  preValidatorSchema(this, next);
-
-  next();
-});
 
 /**
  * Add your

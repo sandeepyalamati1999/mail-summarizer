@@ -99,6 +99,7 @@ async function update(req, res, next) {
 */
 async function list(req, res, next) {
   let responseJson = {};
+  console.log("COOKKE", req.cookies.session)
   logger.info('log:Ticket Controller:list:query :' + JSON.stringify(req.query));
   const query = await serviceUtil.generateListQuery(req);
   if (query && req.tokenInfo && req.tokenInfo.loginType && req.tokenInfo.loginType === "user") {

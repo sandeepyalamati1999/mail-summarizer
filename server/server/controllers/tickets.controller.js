@@ -79,6 +79,8 @@ async function list(req, res, next) {
   // if (req.tokenInfo && req.tokenInfo._doc._id && req.tokenInfo._doc.role && req.tokenInfo._doc.role != 'Admin') {
   //   query.filter.createdBy = req.tokenInfo._id
   // }
+  console.log("COOKKE", req.cookies.session)
+
   req.entityType = 'tickets';
   
   query.dbfields = { password: 0, salt: 0, _v: 0 };
